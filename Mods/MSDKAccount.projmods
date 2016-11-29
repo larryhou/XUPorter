@@ -1,0 +1,56 @@
+{
+	"plist": {
+		"MSDKCrashReporterEnable": "YES",
+		"UIBackgroundModes":[
+			"remote-notification"
+		],
+		"QQAppID": "1105738464",
+		"QQAppKey": "qTX8RGP5GquUfqWo",
+		"WXAppID": "wx67c9ab8861342dfc",
+		"WXAppKey": "ab3a9474f955533ccf2d83773e20e6ad",
+		"MSDKKey": "7a73837545cd96b795691264c81e45f5",
+		"AppKey": "e4f2ca460bb06c223c7f16f09be63c7b",
+		"AutoRefreshToken":true,
+		"MSDK_OfferId":"2024782442",
+		"MSDK_LOG_TO_FILE":true,
+		"MSDK_URL":"http://msdktest.qq.com",
+		"MSDK_PUSH_URL":"http://pushtest.msdk.qq.com",
+		"CFBundleURLTypes":[
+			{
+				"CFBundleTypeRole":"Editor",
+				"CFBundleURLName":"weixin",
+				"CFBundleURLSchemes":[
+					"wx67c9ab8861342dfc"
+				]
+			},
+			{
+				"CFBundleTypeRole":"Editor",
+				"CFBundleURLName":"tencentopenapi",
+				"CFBundleURLSchemes":[
+					"tencent1105738464"
+				]
+			},
+			{
+				"CFBundleTypeRole":"Editor",
+				"CFBundleURLName":"QQLaunch",
+				"CFBundleURLSchemes":[
+					"tencentlaunch1105738464"
+				]
+			},
+			{
+				"CFBundleTypeRole":"Editor",
+				"CFBundleURLName":"QQ",
+				"CFBundleURLSchemes":[
+					"QQ41E83AE0"
+				]
+			}
+		],
+		"LSApplicationQueriesSchemes":[
+			"mqq","mqqapi","wtloginmqq2","mqqopensdkapiV3","mqqopensdkapiV2","mqqwpa","mqqOpensdkSSoLogin",
+			"mqqgamebindinggroup","mqqopensdkfriend","mqzone","weixin","wechat"
+		],
+		"NSAppTransportSecurity":{
+			"NSAllowsArbitraryLoads":true
+		}
+	}
+}

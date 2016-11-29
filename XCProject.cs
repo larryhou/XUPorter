@@ -700,6 +700,8 @@ namespace UnityEditor.XCodeEditor
 		public void ApplyMod( string pbxmod )
 		{
 			XCMod mod = new XCMod( pbxmod );
+			Debug.Log(pbxmod);
+
 			foreach(var lib in mod.libs){
 				Debug.Log("Library: "+lib);
 			}
@@ -774,10 +776,13 @@ namespace UnityEditor.XCodeEditor
 				this.AddOtherLinkerFlags( flag );
 			}
 
-			Debug.Log ("Adding plist items...");
+			Debug.Log ("Adding plist items..." + this.projectRootPath);
 			string plistPath = this.projectRootPath + "/Info.plist";
 			XCPlist plist = new XCPlist (plistPath);
-			plist.Process(mod.plist);
+			if(mod.plist != null)
+			{
+				plist.Process(mod.plist);
+			}
 
 			this.Consolidate();
 		}

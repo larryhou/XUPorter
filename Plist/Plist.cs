@@ -298,16 +298,6 @@ namespace PlistCS
             return array;
         }
 
-        private static void composeArray(List<object> value, XmlWriter writer)
-        {
-            writer.WriteStartElement("array");
-            foreach (object obj in value)
-            {
-                compose(obj, writer);
-            }
-            writer.WriteEndElement();
-        }
-
         private static object parse(XmlNode node)
         {
             switch (node.Name)
@@ -341,7 +331,6 @@ namespace PlistCS
 
         private static void compose(object value, XmlWriter writer)
         {
-
             if (value == null || value is string)
             {
                 writer.WriteElementString("string", value as string);
@@ -350,25 +339,30 @@ namespace PlistCS
             {
                 writer.WriteElementString("integer", ((int)value).ToString(System.Globalization.NumberFormatInfo.InvariantInfo));
             }
-            else if (value is System.Collections.Generic.Dictionary<string, object> ||
-              value.GetType().ToString().StartsWith("System.Collections.Generic.Dictionary`2[System.String"))
+			else if (value is IDictionary)
             {
-                //Convert to Dictionary<string, object>
-                Dictionary<string, object> dic = value as Dictionary<string, object>;
-                if (dic == null)
+				writer.WriteStartElement("dict");
+
+				IDictionary dic = value as IDictionary;
+                if (dic != null)
                 {
-                    dic = new Dictionary<string, object>();
-                    IDictionary idic = (IDictionary)value;
-                    foreach (var key in idic.Keys)
+					foreach (var key in dic.Keys)
                     {
-                        dic.Add(key.ToString(), idic[key]);
+						writer.WriteElementString("key", key.ToString());
+						compose(dic[key], writer);
                     }
                 }
-                writeDictionaryValues(dic, writer);
+
+				writer.WriteEndElement();
             }
-            else if (value is List<object>)
+			else if (value is IList)
             {
-                composeArray((List<object>)value, writer);
+				writer.WriteStartElement("array");
+				foreach (object item in (IList)value)
+				{
+					compose(item, writer);
+				}
+				writer.WriteEndElement();
             }
             else if (value is byte[])
             {
@@ -392,18 +386,6 @@ namespace PlistCS
             {
                 throw new Exception(String.Format("Value type '{0}' is unhandled", value.GetType().ToString()));
             }
-        }
-
-        private static void writeDictionaryValues(Dictionary<string, object> dictionary, XmlWriter writer)
-        {
-            writer.WriteStartElement("dict");
-            foreach (string key in dictionary.Keys)
-            {
-                object value = dictionary[key];
-                writer.WriteElementString("key", key);
-                compose(value, writer);
-            }
-            writer.WriteEndElement();
         }
 
         private static int countObject(object value)

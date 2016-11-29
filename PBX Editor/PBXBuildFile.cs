@@ -11,73 +11,82 @@ namespace UnityEditor.XCodeEditor
 		private const string ATTRIBUTES_KEY = "ATTRIBUTES";
 		private const string WEAK_VALUE = "Weak";
 		private const string COMPILER_FLAGS_KEY = "COMPILER_FLAGS";
-		
-		public PBXBuildFile( PBXFileReference fileRef, bool weak = false ) : base()
+
+		public PBXBuildFile(PBXFileReference fileRef, bool weak = false) : base()
 		{
-			this.Add( FILE_REF_KEY, fileRef.guid );
-			SetWeakLink( weak );
+			this.Add(FILE_REF_KEY, fileRef.guid);
+			SetWeakLink(weak);
 			
-			if (!string.IsNullOrEmpty(fileRef.compilerFlags))
+			if(!string.IsNullOrEmpty(fileRef.compilerFlags))
 			{
-				foreach (var flag in fileRef.compilerFlags.Split(','))
+				foreach(var flag in fileRef.compilerFlags.Split(','))
 					AddCompilerFlag(flag);
 			}
 		}
-		
-		public PBXBuildFile( string guid, PBXDictionary dictionary ) : base ( guid, dictionary )
+
+		public PBXBuildFile(string guid, PBXDictionary dictionary) : base(guid, dictionary)
 		{
 		}
 
 		public string fileRef
 		{
-			get {
-				return (string)_data[ FILE_REF_KEY ];
+			get
+			{
+				return (string)_data[FILE_REF_KEY];
 			}
 		}
-		
-		public bool SetWeakLink( bool weak = false )
+
+		public bool SetWeakLink(bool weak = false)
 		{
 			PBXDictionary settings = null;
 			PBXList attributes = null;
 			
-			if( !_data.ContainsKey( SETTINGS_KEY ) ) {
-				if( weak ) {
+			if(!_data.ContainsKey(SETTINGS_KEY))
+			{
+				if(weak)
+				{
 					attributes = new PBXList();
-					attributes.Add( WEAK_VALUE );
+					attributes.Add(WEAK_VALUE);
 					
 					settings = new PBXDictionary();
-					settings.Add( ATTRIBUTES_KEY, attributes );
+					settings.Add(ATTRIBUTES_KEY, attributes);
 
-					_data.Add( SETTINGS_KEY, settings );
+					_data.Add(SETTINGS_KEY, settings);
 				}
 				return true;
 			}
 			
-			settings = _data[ SETTINGS_KEY ] as PBXDictionary;
-			if( !settings.ContainsKey( ATTRIBUTES_KEY ) ) {
-				if( weak ) {
+			settings = _data[SETTINGS_KEY] as PBXDictionary;
+			if(!settings.ContainsKey(ATTRIBUTES_KEY))
+			{
+				if(weak)
+				{
 					attributes = new PBXList();
-					attributes.Add( WEAK_VALUE );
-					settings.Add( ATTRIBUTES_KEY, attributes );
+					attributes.Add(WEAK_VALUE);
+					settings.Add(ATTRIBUTES_KEY, attributes);
 					return true;
 				}
-				else {
+				else
+				{
 					return false;
 				}
 			}
-			else {
-				attributes = settings[ ATTRIBUTES_KEY ] as PBXList;
+			else
+			{
+				attributes = settings[ATTRIBUTES_KEY] as PBXList;
 			}
 			
-			if( weak ) {
-				attributes.Add( WEAK_VALUE );
+			if(weak)
+			{
+				attributes.Add(WEAK_VALUE);
 			}
-			else {
-				attributes.Remove( WEAK_VALUE );
+			else
+			{
+				attributes.Remove(WEAK_VALUE);
 			}
 			
-			settings.Add( ATTRIBUTES_KEY, attributes );
-			this.Add( SETTINGS_KEY, settings );
+			settings.Add(ATTRIBUTES_KEY, attributes);
+			this.Add(SETTINGS_KEY, settings);
 			
 			return true;
 		}
@@ -85,42 +94,46 @@ namespace UnityEditor.XCodeEditor
 		//CodeSignOnCopy
 		public bool AddCodeSignOnCopy()
 		{
-			if( !_data.ContainsKey( SETTINGS_KEY ) )
-				_data[ SETTINGS_KEY ] = new PBXDictionary();
+			if(!_data.ContainsKey(SETTINGS_KEY))
+				_data[SETTINGS_KEY] = new PBXDictionary();
 
-			var settings = _data[ SETTINGS_KEY ] as PBXDictionary;
-			if( !settings.ContainsKey( ATTRIBUTES_KEY ) ) {
+			var settings = _data[SETTINGS_KEY] as PBXDictionary;
+			if(!settings.ContainsKey(ATTRIBUTES_KEY))
+			{
 				var attributes = new PBXList();
-				attributes.Add( "CodeSignOnCopy" );
-				attributes.Add( "RemoveHeadersOnCopy" );
-				settings.Add( ATTRIBUTES_KEY, attributes );
+				attributes.Add("CodeSignOnCopy");
+				attributes.Add("RemoveHeadersOnCopy");
+				settings.Add(ATTRIBUTES_KEY, attributes);
 			}
-			else {
-				var attributes = settings[ ATTRIBUTES_KEY ] as PBXList;
-				attributes.Add( "CodeSignOnCopy" );
-				attributes.Add( "RemoveHeadersOnCopy" );
+			else
+			{
+				var attributes = settings[ATTRIBUTES_KEY] as PBXList;
+				attributes.Add("CodeSignOnCopy");
+				attributes.Add("RemoveHeadersOnCopy");
 			}
 			return true;		
 		}
 
 		
-		public bool AddCompilerFlag( string flag )
+		public bool AddCompilerFlag(string flag)
 		{
-			if( !_data.ContainsKey( SETTINGS_KEY ) )
-				_data[ SETTINGS_KEY ] = new PBXDictionary();
+			if(!_data.ContainsKey(SETTINGS_KEY))
+				_data[SETTINGS_KEY] = new PBXDictionary();
 			
-			if( !((PBXDictionary)_data[ SETTINGS_KEY ]).ContainsKey( COMPILER_FLAGS_KEY ) ) {
-				((PBXDictionary)_data[ SETTINGS_KEY ]).Add( COMPILER_FLAGS_KEY, flag );
+			if(!((PBXDictionary)_data[SETTINGS_KEY]).ContainsKey(COMPILER_FLAGS_KEY))
+			{
+				((PBXDictionary)_data[SETTINGS_KEY]).Add(COMPILER_FLAGS_KEY, flag);
 				return true;
 			}
 			
-			string[] flags = ((string)((PBXDictionary)_data[ SETTINGS_KEY ])[ COMPILER_FLAGS_KEY ]).Split( ' ' );
-			foreach( string item in flags ) {
-				if( item.CompareTo( flag ) == 0 )
+			string[] flags = ((string)((PBXDictionary)_data[SETTINGS_KEY])[COMPILER_FLAGS_KEY]).Split(' ');
+			foreach(string item in flags)
+			{
+				if(item.CompareTo(flag) == 0)
 					return false;
 			}
 			
-			((PBXDictionary)_data[ SETTINGS_KEY ])[ COMPILER_FLAGS_KEY ] = ( string.Join( " ", flags ) + " " + flag );
+			((PBXDictionary)_data[SETTINGS_KEY])[COMPILER_FLAGS_KEY] = (string.Join(" ", flags) + " " + flag);
 			return true;
 		}
 		

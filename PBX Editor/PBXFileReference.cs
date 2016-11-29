@@ -19,9 +19,9 @@ namespace UnityEditor.XCodeEditor
 			{ TreeEnum.ABSOLUTE, "<absolute>" },
 			{ TreeEnum.GROUP, "<group>" },
 			{ TreeEnum.BUILT_PRODUCTS_DIR, "BUILT_PRODUCTS_DIR" },
-        	{ TreeEnum.DEVELOPER_DIR, "DEVELOPER_DIR" },
-        	{ TreeEnum.SDKROOT, "SDKROOT" },
-        	{ TreeEnum.SOURCE_ROOT, "SOURCE_ROOT" }
+			{ TreeEnum.DEVELOPER_DIR, "DEVELOPER_DIR" },
+			{ TreeEnum.SDKROOT, "SDKROOT" },
+			{ TreeEnum.SOURCE_ROOT, "SOURCE_ROOT" }
 		};
 		
 		public static readonly Dictionary<string, string> typeNames = new Dictionary<string, string> {
@@ -49,7 +49,7 @@ namespace UnityEditor.XCodeEditor
 			{ ".dylib", "compiled.mach-o.dylib" },
 			{ ".tbd", "sourcecode.text-based-dylib-definition" },
 			{ ".json", "text.json" }
-   		 };
+		};
 		
 		public static readonly Dictionary<string, string> typePhases = new Dictionary<string, string> {
 			{ ".a", "PBXFrameworksBuildPhase" },
@@ -76,69 +76,77 @@ namespace UnityEditor.XCodeEditor
 			{ ".bundle", "PBXResourcesBuildPhase" },
 			{ ".dylib", "PBXFrameworksBuildPhase" },
 			{ ".tbd", "PBXFrameworksBuildPhase" }
-    	};
-		
-		public PBXFileReference( string guid, PBXDictionary dictionary ) : base( guid, dictionary )
+		};
+
+		public PBXFileReference(string guid, PBXDictionary dictionary) : base(guid, dictionary)
 		{
 			
 		}
 		
 		//TODO see if XCode has a preference for ordering these attributes
-		public PBXFileReference( string filePath, TreeEnum tree = TreeEnum.SOURCE_ROOT ) : base()
+		public PBXFileReference(string filePath, TreeEnum tree = TreeEnum.SOURCE_ROOT) : base()
 		{
-			this.Add( PATH_KEY, filePath );
-			this.Add( NAME_KEY, System.IO.Path.GetFileName( filePath ) );
-			this.Add( SOURCETREE_KEY, (string)( System.IO.Path.IsPathRooted( filePath ) ? trees[TreeEnum.ABSOLUTE] : trees[tree] ) );
+			this.Add(PATH_KEY, filePath);
+			this.Add(NAME_KEY, System.IO.Path.GetFileName(filePath));
+			this.Add(SOURCETREE_KEY, (string)(System.IO.Path.IsPathRooted(filePath) ? trees[TreeEnum.ABSOLUTE] : trees[tree]));
 			this.GuessFileType();
 		}
-		
-		public string name {
-			get {
-				if( !ContainsKey( NAME_KEY ) ) {
+
+		public string name
+		{
+			get
+			{
+				if(!ContainsKey(NAME_KEY))
+				{
 					return null;
 				}
 				return (string)_data[NAME_KEY];
 			}
 		}
 
-		public string path {
-			get {
-				if( !ContainsKey( PATH_KEY ) ) {
+		public string path
+		{
+			get
+			{
+				if(!ContainsKey(PATH_KEY))
+				{
 					return null;
 				}
 				return (string)_data[PATH_KEY];
 			}
 		}
-		
+
 		private void GuessFileType()
 		{
-			this.Remove( EXPLICIT_FILE_TYPE_KEY );
-			this.Remove( LASTKNOWN_FILE_TYPE_KEY );
-			string extension = System.IO.Path.GetExtension( (string)_data[ PATH_KEY ] );
-			if( !PBXFileReference.typeNames.ContainsKey( extension ) ){
-				Debug.LogWarning( "Unknown file extension: " + extension + "\nPlease add extension and Xcode type to PBXFileReference.types" );
+			this.Remove(EXPLICIT_FILE_TYPE_KEY);
+			this.Remove(LASTKNOWN_FILE_TYPE_KEY);
+			string extension = System.IO.Path.GetExtension((string)_data[PATH_KEY]);
+			if(!PBXFileReference.typeNames.ContainsKey(extension))
+			{
+				Debug.LogWarning("Unknown file extension: " + extension + "\nPlease add extension and Xcode type to PBXFileReference.types");
 				return;
 			}
 			
-			this.Add( LASTKNOWN_FILE_TYPE_KEY, PBXFileReference.typeNames[ extension ] );
-			this.buildPhase = PBXFileReference.typePhases[ extension ];
+			this.Add(LASTKNOWN_FILE_TYPE_KEY, PBXFileReference.typeNames[extension]);
+			this.buildPhase = PBXFileReference.typePhases[extension];
 		}
-		
-		private void SetFileType( string fileType )
+
+		private void SetFileType(string fileType)
 		{
-			this.Remove( EXPLICIT_FILE_TYPE_KEY );
-			this.Remove( LASTKNOWN_FILE_TYPE_KEY );
+			this.Remove(EXPLICIT_FILE_TYPE_KEY);
+			this.Remove(LASTKNOWN_FILE_TYPE_KEY);
 			
-			this.Add( EXPLICIT_FILE_TYPE_KEY, fileType );
+			this.Add(EXPLICIT_FILE_TYPE_KEY, fileType);
 		}
 	}
-	
-	public enum TreeEnum {
+
+	public enum TreeEnum
+	{
 		ABSOLUTE,
-        GROUP,
-        BUILT_PRODUCTS_DIR,
-        DEVELOPER_DIR,
-        SDKROOT,
-        SOURCE_ROOT
+		GROUP,
+		BUILT_PRODUCTS_DIR,
+		DEVELOPER_DIR,
+		SDKROOT,
+		SOURCE_ROOT
 	}
 }

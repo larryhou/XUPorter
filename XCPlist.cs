@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 
-namespace UnityEditor.XCodeEditor 
+namespace UnityEditor.XCodeEditor
 {
 	public class XCPlist
 	{
@@ -31,28 +31,28 @@ namespace UnityEditor.XCodeEditor
 		public void Process(Hashtable plist)
 		{
 			Dictionary<string, object> dict = (Dictionary<string, object>)PlistCS.Plist.readPlist(plistPath);
-			foreach( DictionaryEntry entry in plist)
+			foreach(DictionaryEntry entry in plist)
 			{
 				this.AddPlistItems((string)entry.Key, entry.Value, dict);
 			}
-			if (plistModified)
+			if(plistModified)
 			{
 				PlistCS.Plist.writeXml(dict, plistPath);
 			}
 		}
 
 		// http://stackoverflow.com/questions/20618809/hashtable-to-dictionary
-		public static Dictionary<K,V> HashtableToDictionary<K,V> (Hashtable table)
+		public static Dictionary<K,V> HashtableToDictionary<K,V>(Hashtable table)
 		{
 			Dictionary<K,V> dict = new Dictionary<K,V>();
 			foreach(DictionaryEntry kvp in table)
 				dict.Add((K)kvp.Key, (V)kvp.Value);
 			return dict;
 		}
-		
+
 		public void AddPlistItems(string key, object value, Dictionary<string, object> dict)
 		{
-			Debug.Log ("AddPlistItems: key=" + key);
+			Debug.Log("AddPlistItems: key=" + key);
 			
 			if(key.CompareTo(PlistUrlType) == 0)
 			{
@@ -65,7 +65,7 @@ namespace UnityEditor.XCodeEditor
 				plistModified = true;
 			}
 			else
-			if (value is ArrayList)
+			if(value is ArrayList)
 			{
 				List<object> data = new List<object>();
 				var list = (ArrayList)value;
@@ -87,7 +87,7 @@ namespace UnityEditor.XCodeEditor
 		private void processUrlTypes(ArrayList urltypes, Dictionary<string, object> dict)
 		{
 			List<object> bundleUrlTypes;
-			if (dict.ContainsKey(BundleUrlTypes))
+			if(dict.ContainsKey(BundleUrlTypes))
 			{
 				bundleUrlTypes = (List<object>)dict[BundleUrlTypes];
 			}
@@ -99,7 +99,7 @@ namespace UnityEditor.XCodeEditor
 			foreach(Hashtable table in urltypes)
 			{
 				string role = (string)table[PlistRole];
-				if (string.IsNullOrEmpty(role))
+				if(string.IsNullOrEmpty(role))
 				{
 					role = PlistEditor;
 				}
@@ -114,7 +114,7 @@ namespace UnityEditor.XCodeEditor
 				}
 				
 				Dictionary<string, object> urlTypeDict = this.findUrlTypeByName(bundleUrlTypes, name);
-				if (urlTypeDict == null)
+				if(urlTypeDict == null)
 				{
 					urlTypeDict = new Dictionary<string, object>();
 					urlTypeDict[BundleTypeRole] = role;
@@ -131,16 +131,16 @@ namespace UnityEditor.XCodeEditor
 			}
 			dict[BundleUrlTypes] = bundleUrlTypes;
 		}
-		
+
 		private Dictionary<string, object> findUrlTypeByName(List<object> bundleUrlTypes, string name)
 		{
-			if ((bundleUrlTypes == null) || (bundleUrlTypes.Count == 0))
+			if((bundleUrlTypes == null) || (bundleUrlTypes.Count == 0))
 				return null;
 			
 			foreach(Dictionary<string, object> dict in bundleUrlTypes)
 			{
 				string _n = (string)dict[BundleUrlName];
-				if (string.Compare(_n, name) == 0)
+				if(string.Compare(_n, name) == 0)
 				{
 					return dict;
 				}

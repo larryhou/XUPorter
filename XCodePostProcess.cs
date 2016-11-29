@@ -32,12 +32,12 @@ public static class XCodePostProcess
 			project.ApplyMod(file);
 		}
 
-        //TODO implement generic settings as a module option
+		//TODO implement generic settings as a module option
 //		project.overwriteBuildSetting("CODE_SIGN_IDENTITY[sdk=iphoneos*]", "iPhone Distribution", "Release");
-        project.overwriteBuildSetting("GCC_ENABLE_OBJC_EXCEPTIONS", "YES");
+		project.overwriteBuildSetting("GCC_ENABLE_OBJC_EXCEPTIONS", "YES");
 		project.overwriteBuildSetting("GCC_ENABLE_CPP_EXCEPTIONS", "YES");
 		project.overwriteBuildSetting("GCC_ENABLE_CPP_RTTI", "YES");
-        project.overwriteBuildSetting("ENABLE_BITCODE", "NO");
+		project.overwriteBuildSetting("ENABLE_BITCODE", "NO");
 
 		// Finally save the xcode project
 		project.Save();

@@ -7,81 +7,87 @@ namespace UnityEditor.XCodeEditor
 	public class PBXBuildPhase : PBXObject
 	{
 		protected const string FILES_KEY = "files";
-		
-		public PBXBuildPhase() :base()
+
+		public PBXBuildPhase() : base()
 		{
 		}
-		
-		public PBXBuildPhase( string guid, PBXDictionary dictionary ) : base ( guid, dictionary )
+
+		public PBXBuildPhase(string guid, PBXDictionary dictionary) : base(guid, dictionary)
 		{
 		}
-		
-		public bool AddBuildFile( PBXBuildFile file )
+
+		public bool AddBuildFile(PBXBuildFile file)
 		{
-			if( !ContainsKey( FILES_KEY ) ){
-				this.Add( FILES_KEY, new PBXList() );
+			if(!ContainsKey(FILES_KEY))
+			{
+				this.Add(FILES_KEY, new PBXList());
 			}
-			((PBXList)_data[ FILES_KEY ]).Add( file.guid );			
+			((PBXList)_data[FILES_KEY]).Add(file.guid);			
 			return true;
 		}
-		
-		public void RemoveBuildFile( string id )
+
+		public void RemoveBuildFile(string id)
 		{
-			if( !ContainsKey( FILES_KEY ) ) {
-				this.Add( FILES_KEY, new PBXList() );
+			if(!ContainsKey(FILES_KEY))
+			{
+				this.Add(FILES_KEY, new PBXList());
 				return;
 			}
 			
-			((PBXList)_data[ FILES_KEY ]).Remove( id );
+			((PBXList)_data[FILES_KEY]).Remove(id);
 		}
-		
-		public bool HasBuildFile( string id )
+
+		public bool HasBuildFile(string id)
 		{
-			if( !ContainsKey( FILES_KEY ) ) {
-				this.Add( FILES_KEY, new PBXList() );
+			if(!ContainsKey(FILES_KEY))
+			{
+				this.Add(FILES_KEY, new PBXList());
 				return false;
 			}
 			
-			if( !IsGuid( id ) )
+			if(!IsGuid(id))
 				return false;
 			
-			return ((PBXList)_data[ FILES_KEY ]).Contains( id );
+			return ((PBXList)_data[FILES_KEY]).Contains(id);
 		}
 
-		public PBXList files {
-			get {
-				if( !ContainsKey( FILES_KEY ) ) {
-					this.Add( FILES_KEY, new PBXList() );
+		public PBXList files
+		{
+			get
+			{
+				if(!ContainsKey(FILES_KEY))
+				{
+					this.Add(FILES_KEY, new PBXList());
 				}
-				return (PBXList)_data[ FILES_KEY ];
+				return (PBXList)_data[FILES_KEY];
 			}
 		}
 	}
-	
+
 	public class PBXFrameworksBuildPhase : PBXBuildPhase
 	{
-		public PBXFrameworksBuildPhase( string guid, PBXDictionary dictionary ) : base ( guid, dictionary )
+		public PBXFrameworksBuildPhase(string guid, PBXDictionary dictionary) : base(guid, dictionary)
 		{
 		}
 	}
 
 	public class PBXResourcesBuildPhase : PBXBuildPhase
 	{
-		public PBXResourcesBuildPhase( string guid, PBXDictionary dictionary ) : base ( guid, dictionary )
+		public PBXResourcesBuildPhase(string guid, PBXDictionary dictionary) : base(guid, dictionary)
 		{
 		}
 	}
 
 	public class PBXShellScriptBuildPhase : PBXBuildPhase
 	{
-		public PBXShellScriptBuildPhase( string guid, PBXDictionary dictionary ) : base ( guid, dictionary )
+		public PBXShellScriptBuildPhase(string guid, PBXDictionary dictionary) : base(guid, dictionary)
 		{
 		}
 	}
 
 	public class PBXSourcesBuildPhase : PBXBuildPhase
 	{
-		public PBXSourcesBuildPhase( string guid, PBXDictionary dictionary ) : base ( guid, dictionary )
+		public PBXSourcesBuildPhase(string guid, PBXDictionary dictionary) : base(guid, dictionary)
 		{
 		}
 	}
@@ -90,7 +96,7 @@ namespace UnityEditor.XCodeEditor
 	{
 		//Embed Frameworks PBXCopyFilesBuildPhase constructor
 		//to make sure "isa" = "PBXCopyFilesBuildPhase"
-		public PBXCopyFilesBuildPhase( int buildActionMask ) :base()
+		public PBXCopyFilesBuildPhase(int buildActionMask) : base()
 		{
 			this.Add("buildActionMask", buildActionMask);
 			this.Add("dstPath", "");
@@ -99,7 +105,7 @@ namespace UnityEditor.XCodeEditor
 			this.Add("runOnlyForDeploymentPostprocessing", 0);
 		}
 
-		public PBXCopyFilesBuildPhase( string guid, PBXDictionary dictionary ) : base ( guid, dictionary )
+		public PBXCopyFilesBuildPhase(string guid, PBXDictionary dictionary) : base(guid, dictionary)
 		{
 		}
 	}

@@ -10,17 +10,18 @@ namespace UnityEditor.XCodeEditor
 		{
 			
 		}
-		
-		public PBXList( object firstValue )
+
+		public PBXList(object firstValue)
 		{
-			this.Add( firstValue );
+			this.Add(firstValue);
 		}
-	
+
 		/// <summary>
 		/// This allows us to use the form:
 		/// "if (x)" or "if (!x)"
 		/// </summary>
-		public static implicit operator bool( PBXList x ) {
+		public static implicit operator bool(PBXList x)
+		{
 			//if null or empty, treat us as false/null
 			return (x == null) ? false : (x.Count == 0);
 		}
@@ -28,10 +29,12 @@ namespace UnityEditor.XCodeEditor
 		/// <summary>
 		/// I find this handy. return our fields as comma-separated values
 		/// </summary>
-		public string ToCSV() {
-		// TODO use a char sep argument to allow specifying separator
+		public string ToCSV()
+		{
+			// TODO use a char sep argument to allow specifying separator
 			string ret = string.Empty;
-			foreach (string item in this) {
+			foreach(string item in this)
+			{
 				ret += "\"";
 				ret += item;
 				ret += "\", ";
@@ -42,7 +45,8 @@ namespace UnityEditor.XCodeEditor
 		/// <summary>
 		/// Concatenate and format so appears as "{,,,}"
 		/// </summary>
-		public override string ToString() {
+		public override string ToString()
+		{
 			return "{" + this.ToCSV() + "} ";
 		}
 	}
